@@ -24,15 +24,6 @@ table_data_button = driver.find_element(By.XPATH, "//summary[text()='Table Data'
 table_data_button.click()
 
 # Define the data to be entered
-# data = '''[
-#     {"name": "Bob", "age": 20, "gender": "male"},
-#     {"name": "George", "age": 42, "gender": "male"},
-#     {"name": "Sara", "age": 42, "gender": "female"},
-#     {"name": "Conor", "age": 40, "gender": "male"},
-#     {"name": "Jennifer", "age": 42, "gender": "female"}
-# ]'''
-
-
 with open('input_json.json', 'r') as f:
     data = json.load(f)
 
@@ -98,8 +89,8 @@ expected_data = [[item['name'], str(item['age']), item['gender']] for item in da
 
 # Deleting the first element from original table data
 del table_data[0]
-print("Original data of table - \n", table_data)
-print("Expected data of table - \n", expected_data)
+# print("Original data of table - \n", table_data)
+# print("Expected data of table - \n", expected_data)
 
 # Assert that the extracted data is equal to the expected data
 assert table_data == expected_data, "The data in the table does not match the expected data!"
