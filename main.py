@@ -1,4 +1,5 @@
 # importing necessary modules
+import json
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -23,13 +24,21 @@ table_data_button = driver.find_element(By.XPATH, "//summary[text()='Table Data'
 table_data_button.click()
 
 # Define the data to be entered
-data = '''[
-    {"name": "Bob", "age": 20, "gender": "male"},
-    {"name": "George", "age": 42, "gender": "male"},
-    {"name": "Sara", "age": 42, "gender": "female"},
-    {"name": "Conor", "age": 40, "gender": "male"},
-    {"name": "Jennifer", "age": 42, "gender": "female"}
-]'''
+# data = '''[
+#     {"name": "Bob", "age": 20, "gender": "male"},
+#     {"name": "George", "age": 42, "gender": "male"},
+#     {"name": "Sara", "age": 42, "gender": "female"},
+#     {"name": "Conor", "age": 40, "gender": "male"},
+#     {"name": "Jennifer", "age": 42, "gender": "female"}
+# ]'''
+
+
+with open('input_json.json', 'r') as f:
+    data = json.load(f)
+
+
+# Convert the data dictionary to a JSON string
+data_str = json.dumps(data)
 
 
 time.sleep(2)
@@ -41,7 +50,7 @@ data_input = driver.find_element(By.XPATH, "//textarea[@id='jsondata']")
 data_input.clear()
 
 # Enter the defined data into the input field
-data_input.send_keys(data)
+data_input.send_keys(data_str)
 
 
 time.sleep(5)
@@ -85,18 +94,12 @@ time.sleep(5)
 driver.quit()
 
 # Define the expected data after removing the first element
-expected_data = [
-    ["Bob", "20", "male"],
-    ["George", "42", "male"],
-    ["Sara", "42", "female"],
-    ["Conor", "40", "male"],
-    ["Jennifer", "42", "female"]
-]
+expected_data = [[item['name'], str(item['age']), item['gender']] for item in data]
 
 # Deleting the first element from original table data
 del table_data[0]
-# print("Original data of table - \n", table_data)
-# print("Expected data of table - \n", expected_data)
+print("Original data of table - \n", table_data)
+print("Expected data of table - \n", expected_data)
 
 # Assert that the extracted data is equal to the expected data
 assert table_data == expected_data, "The data in the table does not match the expected data!"
